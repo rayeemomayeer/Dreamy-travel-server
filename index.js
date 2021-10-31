@@ -19,6 +19,7 @@ async function run() {
 
     const database = client.db("DreamyTravels");
     const tourCollection = database.collection("tours");
+    const orderCollection = database.collection("orders");
 
     //load all tours data
     app.get('/tours', async(req, res) => {
@@ -26,6 +27,19 @@ async function run() {
       const tours = await cursor.toArray();
       res.send(tours)
     })
+
+    //load all orders data
+    app.get('/orders', async(req, res) => {
+      const cursor = orderCollection.find({}); 
+      const orders = await cursor.toArray();
+      res.send(orders)
+    })
+    // POST API
+    app.post('/orders', async (req, res) => {
+        const order = req.body;
+        const result = await orderCollection.insertOne(order);
+        res.json(result)
+    });
 
   }
   finally{
